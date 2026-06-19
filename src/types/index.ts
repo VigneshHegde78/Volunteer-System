@@ -2,10 +2,10 @@
 export interface Volunteer {
 	$id?: string;
 	$createdAt?: string;
-	$name?: string;
-	$email?: string;
-	$phone?: string;
-	$skills?: string[];
+	name?: string;
+	email?: string;
+	phone?: string;
+	skills?: string[];
 }
 
 export interface RegistrationFormInput {

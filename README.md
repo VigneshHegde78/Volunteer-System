@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Volunteer Registration & Management System
 
-## Getting Started
+An end-to-end, type-safe Volunteer Registration Web Application built for the **NayePankh Foundation**. This system allows public users to register as volunteers with immediate client-side validation, while isolating a secure Admin Dashboard behind a state-aware authentication layer to track and manage registrations.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🚀 Tech Stack
+
+- **Framework:** Next.js (App Router)
+- **Language:** TypeScript (Strict Type Safety)
+- **Styling:** Tailwind CSS (Responsive Design)
+- **Backend-as-a-Service (BaaS):** Appwrite SDK (Authentication & Databases)
+
+---
+
+## 📂 Project Architecture
+
+The codebase follows clean separation of concerns, isolating data configurations, utilities, validation logic, and specific UI component trees:
+
+```text
+src/
+├── app/
+│   ├── layout.tsx              # Global providers & base configuration
+│   ├── page.tsx                # Public Registration Form Page
+│   └── admin/
+│       ├── layout.tsx          # Protected Route Layout (Global Session Guard)
+│       ├── login/
+│       │   └── page.tsx        # Admin Authentication Interface
+│       └── dashboard/
+│           └── page.tsx        # Secure Volunteer Database Panel
+├── components/
+│   └── form/
+│       └── registration-form.tsx # Controlled, Accessible Registration Form
+├── lib/
+│   ├── appwrite.ts             # Appwrite SDK Engine Initializer (Singleton Pattern)
+│   └── validation.ts           # Pure Validation Functions (Regex-driven)
+└── types/
+    └── index.ts                # Shared Domain Interfaces & Appwrite Intersections
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Installation & Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Clone and Install Dependencies
 
-## Learn More
+```bash
+git clone <your-repository-url>
+cd volunteer-system
+npm install
 
-To learn more about Next.js, take a look at the following resources:
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 2. Configure Environment Variables
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Create a `.env.local` file at the root of the project and populate it with your Appwrite API credentials:
 
-## Deploy on Vercel
+```env
+NEXT_PUBLIC_APPWRITE_ENDPOINT="https://cloud.appwrite.io/v1"
+NEXT_PUBLIC_APPWRITE_PROJECT_ID="your_project_id"
+NEXT_PUBLIC_APPWRITE_DATABASE_ID="your_database_id"
+NEXT_PUBLIC_APPWRITE_COLLECTION_ID="your_collection_id"
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 3. Run the Application
+
+```bash
+# Start development server
+npm run dev
+
+# Run production compilation check
+npm run build
+
+```
+
+---
+
+## 🔑 Tester Credentials
+
+To review the secure panel during evaluation, navigate to `/admin/dashboard`. You will be automatically redirected to the login guard screen. Use the following pre-configured sandbox testing account:
+
+- **Admin Email:** `admin@test.com`
+- **Password:** `#Test123`
+
+---
+
+## 🛡️ Key Structural Implementation Details
+
+- **Route Protection:** Handled via a nested higher-order App Router layout (`/admin/layout.tsx`). It intercepts rendering to fetch active session records with `account.get()`. If unauthorized, it boots the client out to `/admin/login`.
+- **Validation Layer:** Driven by pure functions and Regex string tracking to check parameters directly on the client, minimizing network payloads.
+- **Appwrite Schema Mapping:** Maps structural attributes smoothly (`name`, `email`, `phone`, `skills`) while leveraging Appwrite's built-in `$createdAt` metadata parameter to ensure clean storage constraints.
